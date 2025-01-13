@@ -1,0 +1,6 @@
+C: A Linguagem de Programação Clássica
+A linguagem C foi desenvolvida por Dennis Ritchie nos anos 70 e ainda é amplamente utilizada em sistemas operacionais e desenvolvimento de software de baixo nível. 
+A principal vantagem do C é seu controle detalhado sobre a memória, o que permite a criação de programas eficientes e rápidos.
+No entanto, essa flexibilidade vem com a responsabilidade de gerenciar diretamente a memória, utilizando funções como malloc() e free(), o que pode levar a erros como vazamentos de memória e corrupção de dados se não forem utilizados corretamente. 
+Mesmo com sua sintaxe simples, a programação em C exige um bom entendimento de conceitos como ponteiros e alocação dinâmica de memória.
+

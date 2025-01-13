@@ -1,0 +1,5 @@
+Programação Orientada a Objetos (POO)
+A Programação Orientada a Objetos (POO) é um paradigma de programação que organiza o software em objetos que possuem atributos (dados) e métodos (funções). 
+Esses objetos são instâncias de classes, que definem o comportamento e as propriedades dos mesmos.
+POO promove o uso de conceitos como herança, polimorfismo, encapsulamento e abstração, que tornam o código mais modular e reutilizável. 
+Por exemplo, em um jogo de xadrez, pode-se criar uma classe Peça, e classes derivadas como Rei, Rainha e Bispo, que herdam características da classe Peça, mas com comportamentos específicos para cada tipo de peça.

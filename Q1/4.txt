@@ -1,0 +1,5 @@
+JavaScript e o Desenvolvimento Web
+JavaScript é a principal linguagem para desenvolvimento de páginas web dinâmicas. 
+Originalmente, JavaScript era usado apenas para adicionar interatividade ao HTML e CSS, mas com o tempo, a linguagem evoluiu para suportar aplicações web completas.
+Através de frameworks como React, Angular e Vue.js, desenvolvedores podem criar interfaces interativas e de alto desempenho, aproveitando a capacidade do JavaScript de manipular o DOM (Document Object Model) em tempo real. 
+Além disso, com a introdução de Node.js, é possível usar JavaScript no lado do servidor, permitindo a criação de sistemas completos com uma única linguagem.

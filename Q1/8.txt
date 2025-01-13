@@ -1,0 +1,5 @@
+O Git e Controle de Versão
+O Git é um sistema de controle de versão distribuído criado por Linus Torvalds, o criador do Linux. 
+Ele permite que desenvolvedores acompanhem e gerenciem as alterações no código ao longo do tempo, possibilitando o trabalho colaborativo sem o risco de sobrescrever o trabalho dos outros.
+Com o Git, é possível criar ramificações (branches) para desenvolver novas funcionalidades sem afetar a versão principal do código, e depois mesclar essas ramificações de volta à versão principal de forma controlada. 
+Além disso, o Git é integrado a várias plataformas de hospedagem de código, como GitHub e GitLab, facilitando a colaboração entre equipes de desenvolvimento.

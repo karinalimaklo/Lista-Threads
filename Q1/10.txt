@@ -1,0 +1,6 @@
+Desenvolvimento Ágil e Metodologias
+O desenvolvimento ágil é uma abordagem de gestão de projetos que valoriza a colaboração, a flexibilidade e a entrega contínua de software funcional. 
+Baseado no Manifesto Ágil, esse método prioriza a satisfação do cliente e a capacidade de se adaptar a mudanças rápidas.
+Entre as metodologias ágeis mais populares estão o Scrum e o Kanban. 
+O Scrum organiza o trabalho em ciclos curtos chamados de sprints, enquanto o Kanban utiliza um quadro visual para gerenciar o fluxo de trabalho e otimizar a produção. 
+A flexibilidade oferecida pelas metodologias ágeis permite que as equipes se adaptem às mudanças nas necessidades dos clientes e no mercado.

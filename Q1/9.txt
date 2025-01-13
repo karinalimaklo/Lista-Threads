@@ -1,0 +1,5 @@
+O Papel dos Testes no Desenvolvimento de Software
+Testes de software são essenciais para garantir que o código funcione como esperado e que mudanças no código não quebrem funcionalidades existentes. 
+Existem diferentes tipos de testes, incluindo testes unitários, que verificam a menor unidade de código, como uma função ou método, e testes de integração, que verificam a interação entre diferentes partes do sistema.
+O uso de frameworks de testes automatizados, como JUnit para Java ou PyTest para Python, permite que desenvolvedores escrevam e executem testes de forma eficiente. 
+Além disso, os testes podem ser integrados ao processo de integração contínua, garantindo que o código seja constantemente testado à medida que novas alterações são feitas.

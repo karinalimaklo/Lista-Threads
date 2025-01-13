@@ -1,0 +1,5 @@
+Algoritmos e Estruturas de Dados
+Um algoritmo é uma sequência finita de instruções bem definidas que resolvem um problema específico. 
+No campo da programação, algoritmos são fundamentais, pois são a base para a resolução de tarefas como busca, ordenação e manipulação de dados. 
+Para tornar os algoritmos eficientes, é necessário entender e utilizar estruturas de dados adequadas, como arrays, listas, pilhas e filas.
+A escolha correta de uma estrutura de dados pode melhorar significativamente a performance de um programa, enquanto a escolha errada pode resultar em desempenho baixo e difícil manutenção.

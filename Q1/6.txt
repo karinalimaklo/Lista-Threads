@@ -1,0 +1,5 @@
+O Paradigma Funcional e suas Vantagens
+A programação funcional é um paradigma que trata a computação como a avaliação de funções matemáticas e evita mudanças de estado e dados mutáveis. 
+Em linguagens funcionais, como Haskell, Elixir e até mesmo em algumas partes do JavaScript, funções são tratadas como cidadãos de primeira classe, ou seja, podem ser passadas como parâmetros e retornadas de outras funções.
+Esse paradigma facilita a criação de programas previsíveis, modulares e com menos efeitos colaterais, o que pode reduzir erros em sistemas complexos. 
+Além disso, a imutabilidade das variáveis e o uso de funções puras tornam o código mais fácil de testar e depurar.

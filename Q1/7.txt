@@ -1,0 +1,6 @@
+Estruturas de Dados: Filas, Pilhas e Listas
+Filas e pilhas são exemplos de estruturas de dados lineares que possuem comportamentos específicos em relação à ordem de inserção e remoção de elementos. 
+Em uma fila, os elementos são inseridos no final e removidos do início, implementando o conceito FIFO (First In, First Out). 
+Já em uma pilha, os elementos são inseridos e removidos do topo, seguindo o princípio LIFO (Last In, First Out).
+Listas são uma generalização das pilhas e filas, podendo ser implementadas de diversas formas, como listas simples, duplamente encadeadas ou circulares. 
+Essas estruturas de dados são fundamentais para a manipulação de coleções de elementos, e cada uma tem suas vantagens dependendo do contexto do problema.

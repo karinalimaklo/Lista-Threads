@@ -1,0 +1,5 @@
+Python e suas Aplicações
+Python é uma linguagem de programação de alto nível, conhecida por sua sintaxe simples e legibilidade. 
+Foi criada por Guido van Rossum no final dos anos 80 e ganhou popularidade devido à sua aplicação em áreas como desenvolvimento web, automação, ciência de dados e inteligência artificial.
+Bibliotecas como Pandas, NumPy e Matplotlib facilitam a análise e visualização de dados, enquanto frameworks como Django e Flask são amplamente utilizados para o desenvolvimento de aplicações web. 
+Python também é muito procurada em áreas de aprendizado de máquina, devido à sua facilidade de integração com ferramentas como TensorFlow e scikit-learn.
