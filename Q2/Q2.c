@@ -8,7 +8,8 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 char tabuleiro[TAM][TAM];
 int resultado = -1;
 
-//Função para a leitura do arquivo que contém uma matriz representando o tabuleiro.
+//Como a matriz é dada, o tabuleiro está num arquivo que será lido pelo programa.
+//Função para a leitura do arquivo.
 void ler_arquivo(const char *arquivo){
 
     FILE *file = fopen(arquivo, "r");
