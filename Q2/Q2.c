@@ -8,7 +8,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 char tabuleiro[TAM][TAM];
 int resultado = -1;
 
-//Como a matriz é dada, o tabuleiro está num arquivo que será lido pelo programa.
+//Como a questão fala que a matriz é dada, o tabuleiro está num arquivo que será lido pelo programa.
 //Função para a leitura do arquivo.
 void ler_arquivo(const char *arquivo){
 
