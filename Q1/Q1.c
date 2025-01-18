@@ -9,7 +9,8 @@
 #define x 10
 
 /*Estrutura das Threads*/
-typedef struct {
+typedef struct
+{
     int thread_id;
     char **files;
     int file_count;
@@ -17,7 +18,8 @@ typedef struct {
 } ThreadData;
 
 /*Funcao que faz a procura da palavra nos arquivos*/
-void *search_in_files(void *arg) {
+void *search_in_files(void *arg)
+{
     ThreadData *data = (ThreadData *)arg;
 
     char *result = (char *)malloc(1000 * data->file_count);
@@ -35,22 +37,21 @@ void *search_in_files(void *arg) {
         char line[1024];
         int line_number = 0;
 
-        while(fgets(line, sizeof(line), file))
+        while (fgets(line, sizeof(line), file))
         {
             line_number++;
             char *occurrence_pos = line;
-            while((occurrence_pos = strstr(occurrence_pos, data->word)) != NULL)
+            while ((occurrence_pos = strstr(occurrence_pos, data->word)) != NULL)
             {
                 char occurrence[256];
                 sprintf(occurrence, "<%s>:<%d>\n", data->files[i], line_number);
                 strcat(result, occurrence);
                 occurrence_pos++;
             }
-        } 
-        fclose(file);   
+        }
+        fclose(file);
     }
     pthread_exit((void *)result);
-
 }
 
 int main(int argc, char *argv[])
@@ -61,12 +62,11 @@ int main(int argc, char *argv[])
 
     /*Nomes dos arquivos (O arquivo exemplo possuira 10 ".txt")*/
     char **files = (char **)malloc(x * sizeof(char *));
-    for (int i = 0; i < x; i++) 
+    for (int i = 0; i < x; i++)
     {
-        files[i] = (char *)malloc(10 * sizeof(char)); 
+        files[i] = (char *)malloc(10 * sizeof(char));
         sprintf(files[i], "%d.txt", i + 1);
     }
-    
 
     /*Distribuindo os arquivos entre as threads*/
     int files_per_thread = x / n;
@@ -78,7 +78,6 @@ int main(int argc, char *argv[])
     printf("Digite a palavra a ser buscada: ");
     scanf("%s", word);
 
-    
     /*Criando as threads e dividindo os arquivos entre as threads*/
     /*Alem disso eh chamada a funcao que realiza a busca*/
     int current_file = 0;
@@ -91,7 +90,7 @@ int main(int argc, char *argv[])
         thread_data[t].thread_id = t;
 
         current_file += thread_file_count;
-        
+
         pthread_create(&threads[t], NULL, search_in_files, (void *)&thread_data[t]);
     }
 
@@ -105,4 +104,6 @@ int main(int argc, char *argv[])
     }
 
     pthread_exit(NULL);
+
+    return 0;
 }
