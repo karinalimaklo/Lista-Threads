@@ -102,8 +102,6 @@ int main(int argc, char *argv[])
         printf("%s", res);
         free(res);
     }
-
-    pthread_exit(NULL);
-
+    
     return 0;
 }
