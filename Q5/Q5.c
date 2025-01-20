@@ -6,10 +6,9 @@
 /*Definindo a variavel n como sendo 5 mas pode ser qualquer valor inteiro positivo*/
 #define n 5
 /*Definindo um tamanho para o buffer mas tambem pode ser qualquer valor inteiro positivo*/
-#define TAM_BUFFER 50
+#define TAM_BUFFER 10
 
 /*Struct da Requisicao*/
-/*Certo?*/
 typedef struct {
     void *(*funexec)(void *);
     void *arg;
@@ -41,7 +40,6 @@ pthread_cond_t resultadoPronto;
 int threadsAtivas = 0;
 int proxID = 0;
 int continuarExecutando = 1;
-
 
 /*Thread Despachante*/
 void *despachante(void *arg)
@@ -101,8 +99,6 @@ void *despachante(void *arg)
         /*Sinaliza que o resultado esta disponivel*/
         pthread_cond_broadcast(&resultadoPronto);
     }
-
-    /*Porque NULL?*/
     return NULL;
 }
 
@@ -138,7 +134,6 @@ int agendarExecucao(void *(*funexec)(void *), void *arg)
 }
 
 /*Funcao para pegar o resultado de uma requisição*/
-/*Certo?*/
 void *pegarResultadoExecucao(int id)
 {
     pthread_mutex_lock(&resultadoMutex);
@@ -148,11 +143,11 @@ void *pegarResultadoExecucao(int id)
         pthread_cond_wait(&resultadoPronto, &resultadoMutex);
     }
 
-    void *resultado = bufferResultado[id].resultado;
+    int *resultado = (int *)bufferResultado[id].resultado;
+    printf("Resultado do ID %d: %d\n", id, *resultado);
+    free(resultado);
 
     pthread_mutex_unlock(&resultadoMutex);
-
-    return resultado;
 }
 
 /*o struct deverá ser passado como argumento para funexec durante a criação da thread.*/
@@ -180,7 +175,7 @@ int main(int argc, char *argv[])
     pthread_cond_init(&resultadoPronto, NULL);
 
     /*Simulando Requisições*/
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 10; i++) {
         int *arg = malloc(sizeof(int));
         *arg = i;
         int id = agendarExecucao(funexec, arg);
@@ -188,14 +183,13 @@ int main(int argc, char *argv[])
     }
 
     /*Pegando Resultados*/
-    for(int i = 0; i < 50; i++)
+    for(int i = 0; i < 10; i++)
     {
-        int *resultado = (int *)pegarResultadoExecucao(i);
-        printf("Resultado do ID %d: %d\n", i, *resultado);
-        free(resultado);
+        pegarResultadoExecucao(i);
     }
 
     /*Para a despachante*/
+    pthread_mutex_lock(&bufferMutex);
     continuarExecutando = 0;
     pthread_cond_signal(&requisicaoDisponivel);
     pthread_join(thread_despachante, NULL);
