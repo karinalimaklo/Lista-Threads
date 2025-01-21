@@ -152,12 +152,14 @@ void *pegarResultadoExecucao(int id)
     pthread_mutex_unlock(&resultadoMutex);
 }
 
-/*Funcao exemplo*/
+/*Funcao exemplo que sera executada quando for feita uma requisicao*/
+/*Ela pega o arg e transforma em inteiro e retorna isso como resultado*/
+/*Como ela e uma funcao exemplo ela so faz isso mas pode ser implementado para ela fazer mais algo*/
 void *funexec(void *arg)
 {
     int *num = (int *)arg;
     int *resultado = malloc(sizeof(int));
-    *resultado = (*num) * (*num); /*Porque calcular o quadrado?*/
+    *resultado = (*num);
     printf("Função executada com argumento %d, resultado: %d\n", *num, *resultado);
     return resultado;
 }
