@@ -44,20 +44,21 @@ int continuarExecutando = 1;
 /*Thread Despachante*/
 void *despachante(void *arg)
 {
-    while(continuarExecutando)
+    while(1)
     {
         pthread_mutex_lock(&bufferMutex);
-
-        if(!continuarExecutando)
-        {
-            pthread_mutex_unlock(&bufferMutex);
-            break;
-        }
 
         /*Espera enquanto nao tem requisicoes no buffer*/
         while(contadorBuffer == 0 && continuarExecutando)
         {
             pthread_cond_wait(&requisicaoDisponivel, &bufferMutex);
+        }
+
+        /*Confere se eh pra continuar executando*/
+        if(!continuarExecutando)
+        {
+            pthread_mutex_unlock(&bufferMutex);
+            break;
         }
 
         /*Retira a proxima requisicao do buffer*/
@@ -102,7 +103,7 @@ void *despachante(void *arg)
     return NULL;
 }
 
-/*Analisar as entradas ainda*/
+/*Funcao para agendar a execucao de uma requisicao*/
 int agendarExecucao(void *(*funexec)(void *), void *arg)
 {
     pthread_mutex_lock(&bufferMutex);
@@ -189,15 +190,16 @@ int main(int argc, char *argv[])
     }
 
     /*Para a despachante*/
-    pthread_mutex_lock(&bufferMutex);
     continuarExecutando = 0;
     pthread_cond_signal(&requisicaoDisponivel);
     pthread_join(thread_despachante, NULL);
 
+    /*Libera os recursos associados aos mutexes e variaveis de condicao*/
     pthread_mutex_destroy(&resultadoMutex);
     pthread_mutex_destroy(&bufferMutex);
     pthread_mutex_destroy(&contadorThreadMutex);
     pthread_cond_destroy(&requisicaoDisponivel);
     pthread_cond_destroy(&resultadoPronto);
+
     return 0;
 }
