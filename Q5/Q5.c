@@ -6,6 +6,7 @@
 /*Definindo a variavel n como sendo 5 mas pode ser qualquer valor inteiro positivo*/
 #define n 5
 /*Definindo um tamanho para o buffer mas tambem pode ser qualquer valor inteiro positivo*/
+/*Se quiser aumentar o numero de requisicoes simuladas basta aumentar essa variavel*/
 #define TAM_BUFFER 10
 
 /*Struct da Requisicao*/
@@ -29,12 +30,12 @@ int comecoBuffer = 0, fimBuffer = 0, contadorBuffer = 0;
 /*Buffer que armazena os resultados*/
 Resultado bufferResultado[TAM_BUFFER];
 
-/*Mutexes e variaveis de condicao para evitar condicao de disputa*/
-pthread_mutex_t resultadoMutex;
-pthread_mutex_t bufferMutex;
-pthread_mutex_t contadorThreadMutex;
-pthread_cond_t requisicaoDisponivel;
-pthread_cond_t resultadoPronto;
+/*Inicializando mutexes e variaveis de condicao*/
+pthread_mutex_t resultadoMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t bufferMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t contadorThreadMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t requisicaoDisponivel = PTHREAD_COND_INITIALIZER;
+pthread_cond_t resultadoPronto = PTHREAD_COND_INITIALIZER;
 
 /*Variaveis globais*/
 int threadsAtivas = 0;
@@ -103,7 +104,7 @@ void *despachante(void *arg)
     return NULL;
 }
 
-/*Funcao para agendar a execucao de uma requisicao*/
+/*Funcao para agendar a execucao de funexec para uma requisicao*/
 int agendarExecucao(void *(*funexec)(void *), void *arg)
 {
     pthread_mutex_lock(&bufferMutex);
@@ -151,8 +152,7 @@ void *pegarResultadoExecucao(int id)
     pthread_mutex_unlock(&resultadoMutex);
 }
 
-/*o struct deverá ser passado como argumento para funexec durante a criação da thread.*/
-/*Qual struct?*/
+/*Funcao exemplo*/
 void *funexec(void *arg)
 {
     int *num = (int *)arg;
@@ -168,15 +168,8 @@ int main(int argc, char *argv[])
     pthread_t thread_despachante;
     pthread_create(&thread_despachante, NULL, despachante, NULL);
 
-    /*Inicializando mutexes e variaveis de condicao*/
-    pthread_mutex_init(&resultadoMutex, NULL);
-    pthread_mutex_init(&bufferMutex, NULL);
-    pthread_mutex_init(&contadorThreadMutex, NULL);
-    pthread_cond_init(&requisicaoDisponivel, NULL);
-    pthread_cond_init(&resultadoPronto, NULL);
-
     /*Simulando Requisições*/
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < TAM_BUFFER; i++) {
         int *arg = malloc(sizeof(int));
         *arg = i;
         int id = agendarExecucao(funexec, arg);
@@ -184,7 +177,7 @@ int main(int argc, char *argv[])
     }
 
     /*Pegando Resultados*/
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < TAM_BUFFER; i++)
     {
         pegarResultadoExecucao(i);
     }
