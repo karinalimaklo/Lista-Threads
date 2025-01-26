@@ -33,12 +33,11 @@ Resultado bufferResultado[TAM_BUFFER];
 /*Inicializando mutexes e variaveis de condicao*/
 pthread_mutex_t resultadoMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t bufferMutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t contadorThreadMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t requisicaoDisponivel = PTHREAD_COND_INITIALIZER;
+pthread_cond_t espacoDisponivel = PTHREAD_COND_INITIALIZER;
 pthread_cond_t resultadoPronto = PTHREAD_COND_INITIALIZER;
 
 /*Variaveis globais*/
-int threadsAtivas = 0;
 int proxID = 0;
 int continuarExecutando = 1;
 
@@ -56,7 +55,7 @@ void *despachante(void *arg)
         }
 
         /*Confere se eh pra continuar executando*/
-        if(!continuarExecutando)
+        if(!continuarExecutando && contadorBuffer == 0)
         {
             pthread_mutex_unlock(&bufferMutex);
             break;
@@ -66,40 +65,20 @@ void *despachante(void *arg)
         Requisicao req = bufferRequisicao[comecoBuffer];
         comecoBuffer = (comecoBuffer + 1) % TAM_BUFFER;
         contadorBuffer--;
+        pthread_cond_signal(&espacoDisponivel);
 
         pthread_mutex_unlock(&bufferMutex);
 
-        /*ANALISAR OUTRA FORMA ACHO QUE COM VARIAVEL DE CONDICAO*/
-        pthread_mutex_lock(&contadorThreadMutex);
-        while(threadsAtivas >= n)
-        {
-            pthread_mutex_unlock(&contadorThreadMutex);
-            pthread_mutex_lock(&contadorThreadMutex);
-        }
-        threadsAtivas++;
-        pthread_mutex_unlock(&contadorThreadMutex);
-
-        /*Cria uma nova thread para executar a requisicao*/
-        pthread_t threadReq;
-        pthread_create(&threadReq, NULL, req.funexec, req.arg);
-
-        /*Aguarda a thread terminar e salva o resultado*/
-        void *resultado;
-        pthread_join(threadReq, &resultado);
+        void *resultado = req.funexec(req.arg);
 
         pthread_mutex_lock(&resultadoMutex);
+
         bufferResultado[req.id].id = req.id;
         bufferResultado[req.id].resultado = resultado;
         bufferResultado[req.id].esta_disponivel = 1;
-        pthread_mutex_unlock(&resultadoMutex);
 
-        /*Atualiza o numero de threads*/
-        pthread_mutex_lock(&contadorThreadMutex);
-        threadsAtivas--;
-        pthread_mutex_unlock(&contadorThreadMutex);
-
-        /*Sinaliza que o resultado esta disponivel*/
         pthread_cond_broadcast(&resultadoPronto);
+        pthread_mutex_unlock(&resultadoMutex);
     }
     return NULL;
 }
@@ -109,17 +88,17 @@ int agendarExecucao(void *(*funexec)(void *), void *arg)
 {
     pthread_mutex_lock(&bufferMutex);
 
+    while (contadorBuffer == TAM_BUFFER) {
+        pthread_cond_wait(&espacoDisponivel, &bufferMutex);
+    }
+
     /*Gera o ID*/
     int id = proxID++ % TAM_BUFFER;
 
-    /*Cria a requisicao*/
-    Requisicao req;
-    req.funexec = funexec;
-    req.arg = arg;
-    req.id = id;
-
-    /*Insere a requisicao no buffer*/
-    bufferRequisicao[fimBuffer] = req;
+    /*Cria a requisicao e insere no buffer*/
+    bufferRequisicao[fimBuffer].funexec = funexec;
+    bufferRequisicao[fimBuffer].arg = arg;
+    bufferRequisicao[fimBuffer].id = id;
     fimBuffer = (fimBuffer + 1) % TAM_BUFFER;
     contadorBuffer++;
 
@@ -145,11 +124,10 @@ void *pegarResultadoExecucao(int id)
         pthread_cond_wait(&resultadoPronto, &resultadoMutex);
     }
 
-    int *resultado = (int *)bufferResultado[id].resultado;
-    printf("Resultado do ID %d: %d\n", id, *resultado);
-    free(resultado);
-
+    void *resultado = bufferResultado[id].resultado;
     pthread_mutex_unlock(&resultadoMutex);
+
+    return resultado;
 }
 
 /*Funcao exemplo que sera executada quando for feita uma requisicao*/
@@ -181,18 +159,22 @@ int main(int argc, char *argv[])
     /*Pegando Resultados*/
     for(int i = 0; i < TAM_BUFFER; i++)
     {
-        pegarResultadoExecucao(i);
+        int *resultado = (int *)pegarResultadoExecucao(i);
+        printf("Resultado da requisição %d: %d\n", i, *resultado);
+        free(resultado);
     }
 
     /*Para a despachante*/
+    pthread_mutex_lock(&bufferMutex);
     continuarExecutando = 0;
     pthread_cond_signal(&requisicaoDisponivel);
+    pthread_mutex_unlock(&bufferMutex);
     pthread_join(thread_despachante, NULL);
 
     /*Libera os recursos associados aos mutexes e variaveis de condicao*/
     pthread_mutex_destroy(&resultadoMutex);
     pthread_mutex_destroy(&bufferMutex);
-    pthread_mutex_destroy(&contadorThreadMutex);
+    pthread_cond_destroy(&espacoDisponivel);
     pthread_cond_destroy(&requisicaoDisponivel);
     pthread_cond_destroy(&resultadoPronto);
 
